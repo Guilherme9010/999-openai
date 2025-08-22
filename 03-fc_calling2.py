@@ -63,8 +63,7 @@ resposta = client.chat.completions.create(
     model="gpt-3.5-turbo-0125",
     messages=mensagens,
     tools=tools,
-    tool_choice="auto",
-)
+    tool_choice="auto")
 
 mensagem_resp = resposta.choices[0].message
 tool_calls = mensagem_resp.tool_calls

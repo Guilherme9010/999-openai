@@ -2,6 +2,8 @@ ipykernel
 openai
 python-dotenv
 yfinance
+numpy
 pandas
 matplotlib
 colorama
+pandas-datareader
