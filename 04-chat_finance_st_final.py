@@ -62,10 +62,17 @@ def gera_texto(mensagens):
     tool_calls = resposta.choices[0].message.tool_calls
 
     if tool_calls:
-        #mensagens.append(resposta.choices[0].message.to_dict())
+        #mensagens.append(resposta.choices[0].message.to_dict())     # versão 3.0 (final)
+
+        #mensagens.append({                                          # versão 3.1 (final)
+        #    "role": resposta.choices[0].message.role,
+        #    "content": resposta.choices[0].message.content or ""})
+
+        # Guardar a mensagem assistant com os tool_calls incluídos   # versão 3.2 (final)
         mensagens.append({
             "role": resposta.choices[0].message.role,
-            "content": resposta.choices[0].message.content or ""})
+            "content": resposta.choices[0].message.content or "",
+            "tool_calls": [tc.to_dict() for tc in tool_calls]})
         
         for tool_call in tool_calls:
             fc_name = tool_call.function.name
@@ -78,13 +85,14 @@ def gera_texto(mensagens):
                 "name": fc_name,
                 "content": fc_return
             })
+        
         segunda_resposta = client.chat.completions.create(
             messages=mensagens,
-            model="gpt-3.5-turbo-0125"
-        )
-        #mensagens.append(segunda_resposta.choices[0].message.to_dict())
-        mensagens.append({
-            "role": segunda_resposta.choices[0].message.role,
+            model="gpt-3.5-turbo-0125")
+        
+        #mensagens.append(segunda_resposta.choices[0].message.to_dict())     # versão 3.0 (final)
+        mensagens.append({                                                   # versão 3.1 (final)
+            "role": segunda_resposta.choices[0].message.role,    
             "content": segunda_resposta.choices[0].message.content or ""})
 
     else:
