@@ -77,7 +77,13 @@ def gera_texto(mensagens):
             mensagens.append({
                 "role": segunda_resposta.choices[0].message.role,
                 "content": segunda_resposta.choices[0].message.content} or "")
-        
+
+    else:
+        # Caso não tenha tool_calls, apenas adicionar a resposta normalmente
+        mensagens.append({
+            "role": resposta.choices[0].message.role,
+            "content": resposta.choices[0].message.content or ""})
+
     return mensagens
     
 
