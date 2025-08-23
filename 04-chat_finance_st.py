@@ -53,7 +53,10 @@ def gera_texto(mensagens):
     tool_calls = resposta.choices[0].message.tool_calls
     
     if tool_calls:
-        mensagens.append(resposta.choices[0].message)
+        #mensagens.append(resposta.choices[0].message)
+        mensagens.append({
+            "role": resposta.choices[0].message.role,
+            "content": resposta.choices[0].message.content})
         for tool_call in tool_calls:
             function_name = tool_call.function.name
             function_to_call = funcao_disponivel[function_name]
@@ -70,7 +73,10 @@ def gera_texto(mensagens):
                 messages=mensagens,
                 model="gpt-3.5-turbo-0125")
             
-            mensagens.append(segunda_resposta.choices[0].message)
+            #mensagens.append(segunda_resposta.choices[0].message)
+            mensagens.append({
+                "role": segunda_resposta.choices[0].message.role,
+                "content": segunda_resposta.choices[0].message.content})
         
     return mensagens
     
@@ -102,4 +108,4 @@ if user_input:
     # Exibir a resposta do Chatbot
     ultima_msg = st.session_state.mensagens[-1]
     if ultima_msg["role"] == "assistant":
-        st.chat_message["assistant"].markdown(ultima_msg["content"])
+        st.chat_message("assistant").markdown(ultima_msg["content"])
