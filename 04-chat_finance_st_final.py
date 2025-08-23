@@ -62,7 +62,11 @@ def gera_texto(mensagens):
     tool_calls = resposta.choices[0].message.tool_calls
 
     if tool_calls:
-        mensagens.append(resposta.choices[0].message.to_dict())
+        #mensagens.append(resposta.choices[0].message.to_dict())
+        mensagens.append({
+            "role": resposta.choices[0].message.role,
+            "content": resposta.choices[0].message.content or ""})
+        
         for tool_call in tool_calls:
             fc_name = tool_call.function.name
             fc_to_call = funcoes_disponiveis[fc_name]
@@ -78,8 +82,17 @@ def gera_texto(mensagens):
             messages=mensagens,
             model="gpt-3.5-turbo-0125"
         )
-        mensagens.append(segunda_resposta.choices[0].message.to_dict())
-    
+        #mensagens.append(segunda_resposta.choices[0].message.to_dict())
+        mensagens.append({
+            "role": segunda_resposta.choices[0].message.role,
+            "content": segunda_resposta.choices[0].message.content or ""})
+
+    else:
+        # Caso não tenha tool_calls, apenas adicionar a resposta normalmente
+        mensagens.append({
+            "role": resposta.choices[0].message.role,
+            "content": resposta.choices[0].message.content or ""})
+
     return mensagens
 
 # Configuração da interface do Streamlit
