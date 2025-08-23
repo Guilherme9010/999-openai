@@ -75,4 +75,31 @@ def gera_texto(mensagens):
     return mensagens
     
 
-st.set_page_config(page_title="ChatBot Financeiro", page_icon="")
+st.set_page_config(page_title="ChatBot Financeiro", page_icon="📈")
+
+st.title("Chatbots de Cotação de Ações 📈")
+
+if "mensagens" not in st.session_state:
+    st.session_state.mensagens = []
+
+# Histórico de mensagens
+for msg in st.session_state.mensagens:
+    if msg["role"] == "user":
+        st.chat_message("user").markdown(msg["content"])
+    if msg["role"] == "assistant":
+        st.chat_message("assistant").markdown(msg["content"])
+
+# Entrada de mensagem do usuário
+user_input = st.chat_input("Digite a sua pergunta sobre cotação de ativos: ")
+if user_input:
+    # Adicionar mensagem ao histórico
+    st.session_state.mensagens.append({"role": "user", "content": user_input})
+    st.chat_message("user").markdown(user_input)
+
+    # Processa a mensagem
+    st.session_state.mensagens = gera_texto(st.session_state.mensagens)
+
+    # Exibir a resposta do Chatbot
+    ultima_msg = st.session_state.mensagens[-1]
+    if ultima_msg["role"] == "assistant":
+        st.chat_message["assistant"].markdown(ultima_msg["content"])
